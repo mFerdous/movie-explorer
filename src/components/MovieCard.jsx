@@ -1,3 +1,5 @@
+import { ArrowRight, CalendarDays, Star } from 'lucide-react'
+
 export default function MovieCard({ show, onSelect }) {
   const poster = show.image?.medium
   const year = show.premiered ? show.premiered.slice(0, 4) : '—'
@@ -28,11 +30,18 @@ export default function MovieCard({ show, onSelect }) {
           {show.name}
         </h3>
         <div className="flex items-center gap-3 text-sm text-reel-muted">
-          <span>⭐ {rating ?? 'N/A'}</span>
-          <span>📅 {year}</span>
+          <span className="inline-flex items-center gap-1.5">
+            <Star aria-hidden="true" size={14} className="text-reel-gold" />
+            {rating ?? 'N/A'}
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <CalendarDays aria-hidden="true" size={14} />
+            {year}
+          </span>
         </div>
-        <span className="mt-auto pt-2 text-sm font-semibold text-reel-gold">
-          See details →
+        <span className="mt-auto inline-flex items-center gap-2 pt-2 text-sm font-semibold text-reel-gold">
+          See details
+          <ArrowRight aria-hidden="true" size={15} />
         </span>
       </div>
     </button>

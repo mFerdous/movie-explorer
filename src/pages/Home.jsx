@@ -8,7 +8,7 @@ export default function Home() {
         <div className="grid gap-8 sm:grid-cols-3">
           <Feature
             title="Search anything"
-            body="Look up a title and get matching movies back instantly, powered by TVMaze's search."
+            body="Look up a title and get matching movies back instantly, powered by OMDb's search."
           />
           <Feature
             title="Real ratings"

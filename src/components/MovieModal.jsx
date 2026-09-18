@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { stripHtml } from '../services/tvmaze.js'
+import { CalendarDays, Building2, Star, Tags, X } from 'lucide-react'
+import { stripHtml } from '../services/omdb.js'
 
 export default function MovieModal({ show, onClose }) {
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function MovieModal({ show, onClose }) {
             aria-label="Close"
             className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-reel-bg/80 text-reel-text transition-colors hover:bg-reel-red"
           >
-            ✕
+            <X aria-hidden="true" size={18} />
           </button>
         </div>
 
@@ -60,10 +61,22 @@ export default function MovieModal({ show, onClose }) {
             {show.name}
           </h2>
           <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-reel-muted">
-            <span>⭐ Rating: {rating}</span>
-            <span>📅 Release: {year}</span>
-            <span>🎭 Genre: {genres}</span>
-            <span>📡 Network: {network}</span>
+            <span className="inline-flex items-center gap-1.5">
+              <Star aria-hidden="true" size={14} className="text-reel-gold" />
+              Rating: {rating}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <CalendarDays aria-hidden="true" size={14} />
+              Release: {year}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Tags aria-hidden="true" size={14} />
+              Genre: {genres}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Building2 aria-hidden="true" size={14} />
+              Network: {network}
+            </span>
           </div>
 
           <h3 className="mt-6 font-display text-base font-medium text-reel-text">
@@ -75,9 +88,10 @@ export default function MovieModal({ show, onClose }) {
 
           <button
             onClick={onClose}
-            className="mt-8 ml-auto block rounded-full bg-reel-surface2 px-5 py-2.5 text-sm font-medium text-reel-text transition-colors hover:bg-reel-line"
+            className="mt-8 ml-auto flex items-center gap-2 rounded-full bg-reel-surface2 px-5 py-2.5 text-sm font-medium text-reel-text transition-colors hover:bg-reel-line"
           >
-            ❌ Close
+            <X aria-hidden="true" size={16} />
+            Close
           </button>
         </div>
       </div>

@@ -1,8 +1,7 @@
 # MovieExplorer
 
 A responsive movie discovery application built with React, React Router, and
-Tailwind CSS. Movie data comes from the free [TVMaze REST API](https://www.tvmaze.com/api),
-so no API key is required.
+Tailwind CSS. Movie data comes from the [OMDb API](https://www.omdbapi.com/).
 
 ## Features
 
@@ -13,11 +12,11 @@ so no API key is required.
 - Separate theater image in the hero screening panel for a stronger visual focus.
 - Movie-focused headline, supporting description, and Explore Movies CTA.
 - Subtle entrance animation with reduced-motion support.
-- Footer with application name, copyright information, TVMaze attribution, and GitHub link.
+- Footer with application name, copyright information, OMDb attribution, and GitHub link.
 
 ### Movie listing page
 
-- Browse movies from the TVMaze catalog.
+- Browse a curated starter catalog of movies from OMDb.
 - Search by movie title with a 350 ms debounce.
 - Search results update dynamically as the query changes.
 - Older search responses are ignored so they cannot replace newer results.
@@ -42,20 +41,29 @@ Selecting a movie opens a modal with:
 - Vite
 - React Router
 - Tailwind CSS
-- TVMaze REST API
+- OMDb REST API
+- Vite environment variables
 
-## API endpoints
+## API integration
 
-The app uses these TVMaze endpoints:
+Add your OMDb API key to a local `.env` file. Do not commit the file:
 
-```text
-GET https://api.tvmaze.com/shows?page=0
-GET https://api.tvmaze.com/search/shows?q=:query
-GET https://api.tvmaze.com/shows/:id
+```bash
+cp .env.example .env
 ```
 
-TVMaze represents its catalog as shows, but this project presents those
-catalog items as movies in the user interface.
+Then set `VITE_OMDB_API_KEY` to your key. The app uses OMDb's multi-result
+search endpoint for the initial catalog and title searches, then loads full
+plot details when a movie card is opened:
+
+```text
+GET https://www.omdbapi.com/?s={searchkey}&page={page}&type=movie&apikey={key}
+GET https://www.omdbapi.com/?i={imdbId}&plot=full&type=movie&apikey={key}
+```
+
+The browse page starts with several pages of OMDb results for `the`, giving
+users an initial grid of movie cards. Searches request three result pages and
+replace the grid dynamically after the debounce delay.
 
 ## Getting started
 
@@ -77,11 +85,37 @@ npm run build
 The command creates a static production build in `dist/`, ready for hosting
 on Vercel, Netlify, GitHub Pages, or another static hosting provider.
 
+## Deploy to Vercel
+
+1. Push the project to GitHub, GitLab, or Bitbucket. Keep `.env` out of the repository.
+2. In Vercel, select **Add New Project** and import the repository.
+3. Use these build settings:
+
+```text
+Framework preset: Vite
+Build command: npm run build
+Output directory: dist
+Install command: npm install
+```
+
+4. Add this Environment Variable in the Vercel project settings:
+
+```text
+Name: VITE_OMDB_API_KEY
+Value: your OMDb API key
+Environment: Production, Preview, Development
+```
+
+5. Deploy and open the generated Vercel URL.
+
+The included `vercel.json` rewrite keeps React Router routes such as `/movies`
+working when loaded or refreshed directly.
+
 ## Project structure
 
 ```text
 src/
-├── services/tvmaze.js       # TVMaze fetch helpers and HTML cleanup
+├── services/omdb.js         # OMDb fetch helpers and response normalization
 ├── components/
 │   ├── Navbar.jsx            # Brand and route navigation
 │   ├── Hero.jsx              # Home page hero banner

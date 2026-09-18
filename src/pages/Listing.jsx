@@ -2,23 +2,33 @@ import { useEffect, useMemo, useState } from 'react'
 import SearchBar from '../components/SearchBar.jsx'
 import MovieGrid from '../components/MovieGrid.jsx'
 import MovieModal from '../components/MovieModal.jsx'
-import { getAllShows, searchShows } from '../services/tvmaze.js'
+import { getAllMovies, getMovieById, searchMovies } from '../services/omdb.js'
 
 export default function Listing() {
-  const [allShows, setAllShows] = useState([])
+  const [allMovies, setAllMovies] = useState([])
   const [searchResults, setSearchResults] = useState(null)
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [selected, setSelected] = useState(null)
 
+  async function handleSelect(movie) {
+    setSelected(movie)
+    try {
+      const details = await getMovieById(movie.id)
+      setSelected(details)
+    } catch {
+      // Keep the search result visible if the details request fails.
+    }
+  }
+
   // Load the default browse grid once.
   useEffect(() => {
     let cancelled = false
     setLoading(true)
-    getAllShows()
+    getAllMovies()
       .then((data) => {
-        if (!cancelled) setAllShows(data)
+        if (!cancelled) setAllMovies(data)
       })
       .catch(() => {
         if (!cancelled) setError(true)
@@ -37,13 +47,13 @@ export default function Listing() {
     if (!trimmed) {
       setSearchResults(null)
       setError(false)
-      if (allShows.length > 0) setLoading(false)
+      if (allMovies.length > 0) setLoading(false)
       return
     }
     let cancelled = false
     const handle = setTimeout(() => {
       setLoading(true)
-      searchShows(trimmed)
+      searchMovies(trimmed)
         .then((data) => {
           if (!cancelled) {
             setSearchResults(data)
@@ -61,11 +71,11 @@ export default function Listing() {
       cancelled = true
       clearTimeout(handle)
     }
-  }, [query, allShows.length])
+  }, [query, allMovies.length])
 
-  const shows = useMemo(
-    () => (searchResults !== null ? searchResults : allShows),
-    [searchResults, allShows]
+  const movies = useMemo(
+    () => (searchResults !== null ? searchResults : allMovies),
+    [searchResults, allMovies]
   )
 
   return (
@@ -81,17 +91,17 @@ export default function Listing() {
         <SearchBar
           value={query}
           onChange={setQuery}
-          resultCount={shows.length}
+          resultCount={movies.length}
           hasQuery={query.trim().length > 0}
         />
       </div>
 
       <div className="mt-10">
         <MovieGrid
-          shows={shows}
+          shows={movies}
           loading={loading}
           error={error}
-          onSelect={setSelected}
+          onSelect={handleSelect}
         />
       </div>
 
