@@ -40,7 +40,7 @@ export default function Hero() {
               Explore movies
               <span aria-hidden="true" className="text-lg leading-none">→</span>
             </Link>
-            <span className="text-sm text-reel-text/60">Updated from TVMaze</span>
+            <span className="text-sm text-reel-text/60">Powered by OMDb</span>
           </div>
         </div>
 

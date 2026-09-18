@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { stripHtml } from '../services/tvmaze.js'
+import { stripHtml } from '../services/omdb.js'
 
 export default function MovieModal({ show, onClose }) {
   useEffect(() => {

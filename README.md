@@ -1,8 +1,7 @@
 # MovieExplorer
 
 A responsive movie discovery application built with React, React Router, and
-Tailwind CSS. Movie data comes from the free [TVMaze REST API](https://www.tvmaze.com/api),
-so no API key is required.
+Tailwind CSS. Movie data comes from the [OMDb API](https://www.omdbapi.com/).
 
 ## Features
 
@@ -13,11 +12,11 @@ so no API key is required.
 - Separate theater image in the hero screening panel for a stronger visual focus.
 - Movie-focused headline, supporting description, and Explore Movies CTA.
 - Subtle entrance animation with reduced-motion support.
-- Footer with application name, copyright information, TVMaze attribution, and GitHub link.
+- Footer with application name, copyright information, OMDb attribution, and GitHub link.
 
 ### Movie listing page
 
-- Browse movies from the TVMaze catalog.
+- Browse a curated starter catalog of movies from OMDb.
 - Search by movie title with a 350 ms debounce.
 - Search results update dynamically as the query changes.
 - Older search responses are ignored so they cannot replace newer results.
@@ -42,20 +41,28 @@ Selecting a movie opens a modal with:
 - Vite
 - React Router
 - Tailwind CSS
-- TVMaze REST API
+- OMDb REST API
+- Vite environment variables
 
-## API endpoints
+## API integration
 
-The app uses these TVMaze endpoints:
+Add your OMDb API key to a local `.env` file. Do not commit the file:
 
-```text
-GET https://api.tvmaze.com/shows?page=0
-GET https://api.tvmaze.com/search/shows?q=:query
-GET https://api.tvmaze.com/shows/:id
+```bash
+cp .env.example .env
 ```
 
-TVMaze represents its catalog as shows, but this project presents those
-catalog items as movies in the user interface.
+Then set `OMDB_API_KEY` to your key. The app uses OMDb's full-plot movie
+lookup endpoint for both the initial catalog and title searches:
+
+```text
+GET https://www.omdbapi.com/?t={searchkey}&plot=full&type=movie&apikey={key}
+GET https://www.omdbapi.com/?i={imdbId}&plot=full&type=movie&apikey={key}
+```
+
+OMDb's `t` lookup returns one movie per request. The browse page therefore
+loads a small set of featured movie titles in parallel, while searches return
+the exact title match from OMDb.
 
 ## Getting started
 
@@ -81,7 +88,7 @@ on Vercel, Netlify, GitHub Pages, or another static hosting provider.
 
 ```text
 src/
-├── services/tvmaze.js       # TVMaze fetch helpers and HTML cleanup
+├── services/omdb.js         # OMDb fetch helpers and response normalization
 ├── components/
 │   ├── Navbar.jsx            # Brand and route navigation
 │   ├── Hero.jsx              # Home page hero banner
