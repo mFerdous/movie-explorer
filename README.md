@@ -85,6 +85,32 @@ npm run build
 The command creates a static production build in `dist/`, ready for hosting
 on Vercel, Netlify, GitHub Pages, or another static hosting provider.
 
+## Deploy to Vercel
+
+1. Push the project to GitHub, GitLab, or Bitbucket. Keep `.env` out of the repository.
+2. In Vercel, select **Add New Project** and import the repository.
+3. Use these build settings:
+
+```text
+Framework preset: Vite
+Build command: npm run build
+Output directory: dist
+Install command: npm install
+```
+
+4. Add this Environment Variable in the Vercel project settings:
+
+```text
+Name: VITE_OMDB_API_KEY
+Value: your OMDb API key
+Environment: Production, Preview, Development
+```
+
+5. Deploy and open the generated Vercel URL.
+
+The included `vercel.json` rewrite keeps React Router routes such as `/movies`
+working when loaded or refreshed directly.
+
 ## Project structure
 
 ```text
