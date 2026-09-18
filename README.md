@@ -52,17 +52,18 @@ Add your OMDb API key to a local `.env` file. Do not commit the file:
 cp .env.example .env
 ```
 
-Then set `OMDB_API_KEY` to your key. The app uses OMDb's full-plot movie
-lookup endpoint for both the initial catalog and title searches:
+Then set `VITE_OMDB_API_KEY` to your key. The app uses OMDb's multi-result
+search endpoint for the initial catalog and title searches, then loads full
+plot details when a movie card is opened:
 
 ```text
-GET https://www.omdbapi.com/?t={searchkey}&plot=full&type=movie&apikey={key}
+GET https://www.omdbapi.com/?s={searchkey}&page={page}&type=movie&apikey={key}
 GET https://www.omdbapi.com/?i={imdbId}&plot=full&type=movie&apikey={key}
 ```
 
-OMDb's `t` lookup returns one movie per request. The browse page therefore
-loads a small set of featured movie titles in parallel, while searches return
-the exact title match from OMDb.
+The browse page starts with several pages of OMDb results for `the`, giving
+users an initial grid of movie cards. Searches request three result pages and
+replace the grid dynamically after the debounce delay.
 
 ## Getting started
 

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import SearchBar from '../components/SearchBar.jsx'
 import MovieGrid from '../components/MovieGrid.jsx'
 import MovieModal from '../components/MovieModal.jsx'
-import { getAllMovies, searchMovies } from '../services/omdb.js'
+import { getAllMovies, getMovieById, searchMovies } from '../services/omdb.js'
 
 export default function Listing() {
   const [allMovies, setAllMovies] = useState([])
@@ -11,6 +11,16 @@ export default function Listing() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [selected, setSelected] = useState(null)
+
+  async function handleSelect(movie) {
+    setSelected(movie)
+    try {
+      const details = await getMovieById(movie.id)
+      setSelected(details)
+    } catch {
+      // Keep the search result visible if the details request fails.
+    }
+  }
 
   // Load the default browse grid once.
   useEffect(() => {
@@ -91,7 +101,7 @@ export default function Listing() {
           shows={movies}
           loading={loading}
           error={error}
-          onSelect={setSelected}
+          onSelect={handleSelect}
         />
       </div>
 
