@@ -1,17 +1,16 @@
 import { Link, NavLink } from 'react-router-dom'
+import logo from '../assets/movie-explorer-logo.svg'
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-40 border-b border-reel-line/70 bg-reel-bg/90 backdrop-blur">
+    <header className="sticky top-0 z-40 bg-reel-bg/90 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
         <Link
           to="/"
           className="flex items-center gap-2 font-display text-xl font-medium tracking-tight text-reel-text"
         >
-          <span aria-hidden="true" className="text-reel-gold">
-            ●
-          </span>
-          MovieExplorer
+          <img src={logo} alt="MovieExplorer" className="h-10 w-10" />
+          <span>MovieExplorer</span>
         </Link>
 
         <div className="flex items-center gap-6">

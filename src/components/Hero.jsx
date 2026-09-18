@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
 
 export default function Hero() {
   return (
@@ -38,7 +39,7 @@ export default function Hero() {
               className="inline-flex items-center gap-3 rounded-full bg-reel-gold px-6 py-3.5 text-sm font-semibold text-reel-bg transition-transform hover:scale-[1.03]"
             >
               Explore movies
-              <span aria-hidden="true" className="text-lg leading-none">→</span>
+              <ArrowRight aria-hidden="true" size={17} />
             </Link>
             <span className="text-sm text-reel-text/60">Powered by OMDb</span>
           </div>

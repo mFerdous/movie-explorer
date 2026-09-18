@@ -1,3 +1,5 @@
+import { Search } from 'lucide-react'
+
 export default function SearchBar({ value, onChange, resultCount, hasQuery }) {
   return (
     <div>
@@ -5,9 +7,7 @@ export default function SearchBar({ value, onChange, resultCount, hasQuery }) {
         Search for a movie
       </label>
       <div className="flex items-center gap-3 rounded-full border border-reel-line bg-reel-surface px-5 py-3.5 focus-within:border-reel-gold">
-        <span aria-hidden="true" className="text-reel-muted">
-          🔍
-        </span>
+        <Search aria-hidden="true" size={18} className="shrink-0 text-reel-muted" />
         <input
           id="movie-search"
           type="text"

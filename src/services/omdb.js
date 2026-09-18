@@ -1,5 +1,6 @@
 const BASE_URL = 'https://www.omdbapi.com/'
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY
+const movieDetailsCache = new Map()
 const featuredSearches = [
   'star wars',
   'batman',
@@ -44,12 +45,19 @@ function normalizeMovie(movie) {
 }
 
 async function fetchMovie(params) {
+  const cacheKey = params.i || params.t
+  if (cacheKey && movieDetailsCache.has(cacheKey)) {
+    return movieDetailsCache.get(cacheKey)
+  }
+
   const response = await fetch(buildUrl({ ...params, plot: 'full', type: 'movie' }))
   if (!response.ok) throw new Error('Failed to load movies')
 
   const data = await response.json()
   if (data.Response === 'False') throw new Error(data.Error || 'Movie not found')
-  return normalizeMovie(data)
+  const movie = normalizeMovie(data)
+  if (cacheKey) movieDetailsCache.set(cacheKey, movie)
+  return movie
 }
 
 async function searchMoviePage(query, page = 1) {
@@ -61,7 +69,15 @@ async function searchMoviePage(query, page = 1) {
   const data = await response.json()
   if (data.Response === 'False') throw new Error(data.Error || 'No movies found')
 
-  return data.Search.map((movie) => normalizeMovie(movie))
+  const movies = data.Search.map((movie) => normalizeMovie(movie))
+  const detailedMovies = await Promise.allSettled(
+    movies.map((movie) => fetchMovie({ i: movie.id }))
+  )
+
+  return movies.map((movie, index) => {
+    const result = detailedMovies[index]
+    return result?.status === 'fulfilled' ? result.value : movie
+  })
 }
 
 export function stripHtml(text) {
